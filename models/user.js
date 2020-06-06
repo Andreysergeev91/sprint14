@@ -7,15 +7,15 @@ const validate = require('mongoose-validator');
 const avatarLinkValidator = [
   validate({
     validator: 'isURL',
-    message: 'There should be a link in this field'
-  })
+    message: 'There should be a link in this field',
+  }),
 ];
 
 const emailValidator = [
   validate({
     validator: 'isEmail',
-    message: 'There should be an Email adress in this field'
-  })
+    message: 'There should be an Email adress in this field',
+  }),
 ];
 
 const userSchema = new mongoose.Schema({
@@ -23,31 +23,31 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true
+    required: true,
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true
+    required: true,
   },
   avatar: {
     type: String,
     required: true,
-    validate: avatarLinkValidator
+    validate: avatarLinkValidator,
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    validate: emailValidator
+    validate: emailValidator,
   },
   password: {
     type: String,
     required: true,
     select: false,
-    minlength: 8
-  }
+    minlength: 8,
+  },
 });
 
 // eslint-disable-next-line func-names
