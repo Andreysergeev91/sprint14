@@ -31,11 +31,11 @@ module.exports.getUsersById = (req, res) => {
 
 module.exports.createUser = (req, res) => {
   const {
-    name, about, avatar, email, password
+    name, about, avatar, email, password,
   } = req.body;
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
-      name, about, avatar, email, password: hash
+      name, about, avatar, email, password: hash,
     }))
     .then((user) => res.send({ data: user }))
     .catch((err) => checkLinkValidation(res, err));
@@ -49,9 +49,9 @@ module.exports.login = (req, res) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
       res.cookie('jwt', token, {
         maxAge: 168 * 3600000,
-        httpOnly: true
-      })
-        .end();
+        httpOnly: true,
+      });
+      res.send({ token });
     })
     .catch((err) => {
       res
