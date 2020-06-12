@@ -10,12 +10,20 @@ module.exports.getCards = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   if (mongoose.Types.ObjectId.isValid(req.params.cardId)) {
-    Card.findByIdAndRemove(req.params.cardId)
+    Card.findById(req.params.cardId)
       .then((card) => {
         if (card == null) {
           res.status(404).send({ data: 'Карточка с данным Id не найдена' });
+        } else if (JSON.stringify(card.owner) !== JSON.stringify(req.user._id)) {
+          res.status(403).send({ data: 'Карточка создана другим пользователем' });
         } else {
-          res.send({ data: card });
+          Card.deleteOne(card, (err) => {
+            if (err) {
+              throw err;
+            } else {
+              res.send({ data: card });
+            }
+          });
         }
       })
       .catch((err) => res.status(500).send({ data: err.message }));
